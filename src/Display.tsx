@@ -1,5 +1,9 @@
 export type DisplayProps = { currentValue: string };
 
 export const Display: React.FC<DisplayProps> = ({ currentValue }) => {
-  return <div className="display">{currentValue}</div>;
+  const roundedValue = (
+    Math.round(Number(currentValue) * 100000) / 100000
+  ).toString();
+  const displayValue = roundedValue.length > 7 ? "WOWZERS" : roundedValue;
+  return <div className="display">{displayValue}</div>;
 };
