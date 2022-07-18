@@ -31,6 +31,13 @@ export const Button: React.FC<ButtonProps> = ({
   setWaitingForOperation,
   waitingForOperation,
 }) => {
+  function clearAll() {
+    setCurrentValue("0");
+    setPreviousValue("0");
+    setOperation(undefined);
+    setWaitingForOperation(true);
+  }
+
   const buttonClickHandler = () => {
     switch (num.type) {
       case "digit":
