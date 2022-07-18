@@ -1,13 +1,25 @@
 import { Operands, isOperand, operations } from "./shared/Operands";
 
 export type ButtonProps = {
-  num: number | Operands | string;
-  setCurrentValue?: React.Dispatch<React.SetStateAction<string>>;
-  currentValue?: string;
+  num:
+    | {
+        type: "digit";
+        value: string;
+      }
+    | {
+        type: "other";
+        value: string;
+      }
+    | {
+        type: "operand";
+        value: Operands;
+      };
+  setCurrentValue: React.Dispatch<React.SetStateAction<string>>;
+  currentValue: string;
   previousValue?: string;
   operation?: Operands;
-  setPreviousValue?: React.Dispatch<React.SetStateAction<string | undefined>>;
-  setOperation?: React.Dispatch<React.SetStateAction<Operands | undefined>>;
+  setPreviousValue: React.Dispatch<React.SetStateAction<string | undefined>>;
+  setOperation: React.Dispatch<React.SetStateAction<Operands | undefined>>;
   waitingForOperation: boolean;
   setWaitingForOperation: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -24,55 +36,42 @@ export const Button: React.FC<ButtonProps> = ({
   waitingForOperation,
 }) => {
   const buttonClickHandler = () => {
-    if (
-      typeof num === "number" &&
-      setCurrentValue &&
-      setPreviousValue &&
-      currentValue
-    ) {
+    if (num.type === "digit") {
       if (waitingForOperation) {
         if (currentValue === "0") {
-          setCurrentValue(num.toString());
-        } else setCurrentValue(currentValue.concat(num.toString()));
+          setCurrentValue(num.value);
+        } else setCurrentValue(currentValue.concat(num.value));
       } else if (!waitingForOperation) {
-        setCurrentValue(num.toString());
+        setCurrentValue(num.value);
         setWaitingForOperation(true);
       }
-    } else if (
-      isOperand(num) &&
-      setOperation &&
-      setPreviousValue &&
-      currentValue
-    ) {
-      console.log(previousValue, setCurrentValue);
+    } else if (num.type === "operand") {
       if (!operation) {
-        setOperation(num);
+        setOperation(num.value);
         setPreviousValue(currentValue);
         setWaitingForOperation(false);
-      } else if (previousValue && setCurrentValue) {
-        if (waitingForOperation) {
-          const computedValue = operations[operation](
-            Number(previousValue),
-            Number(currentValue)
-          ).toString();
-          setPreviousValue(computedValue);
-          setCurrentValue(computedValue);
+      } else if (waitingForOperation) {
+        const computedValue = operations[operation](
+          Number(previousValue),
+          Number(currentValue)
+        ).toString();
+        setPreviousValue(computedValue);
+        setCurrentValue(computedValue);
 
-          setWaitingForOperation(false);
-          setOperation(num);
-        } else {
-          setOperation(num);
-        }
+        setWaitingForOperation(false);
+        setOperation(num.value);
+      } else {
+        setOperation(num.value);
       }
     }
   };
 
   return (
     <div
-      className={`button ${num === 0 ? "zero" : ""}`}
+      className={`button ${num.value === "0" ? "zero" : ""}`}
       onClick={buttonClickHandler}
     >
-      {num}
+      {num.value}
     </div>
   );
 };

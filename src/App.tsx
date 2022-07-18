@@ -10,14 +10,42 @@ function App() {
   const [previousValue, setPreviousValue] = useState<string>();
   const [operation, setOperation] = useState<Operands>();
   const [waitingForOperation, setWaitingForOperation] = useState<boolean>(true);
+  const digitsOptions = [
+    { type: "digit", value: "1" },
+    { type: "digit", value: "2" },
+    { type: "digit", value: "3" },
+    { type: "digit", value: "4" },
+    { type: "digit", value: "5" },
+    { type: "digit", value: "6" },
+    { type: "digit", value: "7" },
+    { type: "digit", value: "8" },
+    { type: "digit", value: "9" },
+    { type: "digit", value: "0" },
+    { type: "other", value: "," },
+  ] as const;
+
+  const operandsOptions = [
+    { type: "operand", value: "+" },
+    { type: "operand", value: "-" },
+    { type: "operand", value: "x" },
+    { type: "operand", value: "÷" },
+    { type: "operand", value: "=" },
+  ] as const;
+
+  const otherOptions = [
+    { type: "other", value: "AC" },
+    { type: "other", value: "+/-" },
+    { type: "other", value: "%" },
+  ] as const;
+
   return (
     <div id="wrapper">
       <div id="App">
         <Display currentValue={currentValue} />
         <div className="button-container">
-          {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0, ","].map((num) => (
+          {digitsOptions.map((num) => (
             <Button
-              key={num}
+              key={num.value}
               num={num}
               operation={operation}
               setOperation={setOperation}
@@ -31,9 +59,9 @@ function App() {
           ))}
         </div>
         <div className="operations-container">
-          {["+", "-", "x", "÷", "="].map((num) => (
+          {operandsOptions.map((num) => (
             <Button
-              key={num}
+              key={num.value}
               num={num}
               operation={operation}
               setOperation={setOperation}
@@ -47,9 +75,9 @@ function App() {
           ))}
         </div>
         <div className="top-container">
-          {["AC", "+/-", "%"].map((num) => (
+          {otherOptions.map((num) => (
             <Button
-              key={num}
+              key={num.value}
               num={num}
               operation={operation}
               setOperation={setOperation}
