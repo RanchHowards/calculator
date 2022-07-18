@@ -3,17 +3,7 @@ import "./App.css";
 import React, { useState } from "react";
 import { Button } from "./Button";
 import { Display } from "./Display";
-import { Operands } from "../shared/Operands";
-
-type Operation = (num1: number, num2: number) => number;
-
-const operations: Record<Operands, Operation> = {
-  "+": (num1, num2) => num1 + num2,
-  "-": (num1, num2) => num1 - num2,
-  x: (num1, num2) => num1 * num2,
-  "÷": (num1, num2) => num1 / num2,
-  "=": (num1, num2) => num2,
-};
+import { Operands } from "./shared/Operands";
 
 function App() {
   const [currentValue, setCurrentValue] = useState<string>("0");

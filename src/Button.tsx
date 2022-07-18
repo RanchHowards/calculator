@@ -1,3 +1,5 @@
+import { Operands, isOperand, operations } from "./shared/Operands";
+
 export type ButtonProps = {
   num: number | Operands | string;
   setCurrentValue?: React.Dispatch<React.SetStateAction<string>>;
