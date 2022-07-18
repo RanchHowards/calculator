@@ -21,7 +21,7 @@ function App() {
     { type: "digit", value: "8" },
     { type: "digit", value: "9" },
     { type: "digit", value: "0" },
-    { type: "other", value: "," },
+    { type: "decimal", value: "." },
   ] as const;
 
   const operandsOptions = [
@@ -33,9 +33,9 @@ function App() {
   ] as const;
 
   const otherOptions = [
-    { type: "other", value: "AC" },
-    { type: "other", value: "+/-" },
-    { type: "other", value: "%" },
+    { type: "clear", value: "AC" },
+    { type: "opposite", value: "+/-" },
+    { type: "percentage", value: "%" },
   ] as const;
 
   return (

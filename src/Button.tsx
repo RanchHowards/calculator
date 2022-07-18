@@ -1,13 +1,9 @@
-import { Operands, isOperand, operations } from "./shared/Operands";
+import { Operands, operations } from "./shared/Operands";
 
 export type ButtonProps = {
   num:
     | {
-        type: "digit";
-        value: string;
-      }
-    | {
-        type: "other";
+        type: "digit" | "decimal" | "percentage" | "opposite" | "clear";
         value: string;
       }
     | {
@@ -36,33 +32,42 @@ export const Button: React.FC<ButtonProps> = ({
   waitingForOperation,
 }) => {
   const buttonClickHandler = () => {
-    if (num.type === "digit") {
-      if (waitingForOperation) {
-        if (currentValue === "0") {
+    switch (num.type) {
+      case "digit":
+        if (waitingForOperation) {
+          if (currentValue === "0") {
+            setCurrentValue(num.value);
+          } else setCurrentValue(currentValue.concat(num.value));
+        } else if (!waitingForOperation) {
           setCurrentValue(num.value);
-        } else setCurrentValue(currentValue.concat(num.value));
-      } else if (!waitingForOperation) {
-        setCurrentValue(num.value);
-        setWaitingForOperation(true);
-      }
-    } else if (num.type === "operand") {
-      if (!operation) {
-        setOperation(num.value);
-        setPreviousValue(currentValue);
-        setWaitingForOperation(false);
-      } else if (waitingForOperation) {
-        const computedValue = operations[operation](
-          Number(previousValue),
-          Number(currentValue)
-        ).toString();
-        setPreviousValue(computedValue);
-        setCurrentValue(computedValue);
+          setWaitingForOperation(true);
+        }
+        break;
 
-        setWaitingForOperation(false);
-        setOperation(num.value);
-      } else {
-        setOperation(num.value);
-      }
+      case "operand":
+        if (!operation) {
+          setOperation(num.value);
+          setPreviousValue(currentValue);
+          setWaitingForOperation(false);
+        } else if (waitingForOperation) {
+          const computedValue = operations[operation](
+            Number(previousValue),
+            Number(currentValue)
+          ).toString();
+          setPreviousValue(computedValue);
+          setCurrentValue(computedValue);
+
+          setWaitingForOperation(false);
+          setOperation(num.value);
+        } else {
+          setOperation(num.value);
+        }
+        break;
+      case "clear":
+        clearAll();
+        break;
+      default:
+        console.log("default case!");
     }
   };
 
