@@ -14,7 +14,7 @@
 }
 .display {
   grid-column: 1 /5;
-  background-color: grey;
+  background-color: rgb(48, 48, 48);
   font-size: 4em;
   text-align: right;
   padding-right: 10px;
@@ -24,7 +24,7 @@
   display: grid;
   grid-template: repeat(4, 1fr) / repeat(3, 1fr);
   text-align: center;
-  background-color: rgb(92, 96, 93, 0.9);
+  background-color: grey;
 }
 .operations-container {
   grid-area: 2/4 / span 5 / span 1;
@@ -36,7 +36,7 @@
   grid-area: 2/1 / 3 / 4;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  background-color: grey;
+  background-color: rgb(92, 96, 93, 0.9);
 }
 
 .button {
