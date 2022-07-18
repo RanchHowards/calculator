@@ -79,6 +79,7 @@ export const Button: React.FC<ButtonProps> = ({
             setCurrentValue(num.value);
           } else setCurrentValue(currentValue.concat(num.value));
         } else if (!waitingForOperation) {
+          setPreviousValue(currentValue);
           setCurrentValue(num.value);
           setWaitingForOperation(true);
         }
@@ -87,23 +88,28 @@ export const Button: React.FC<ButtonProps> = ({
       case "operand":
         if (!operation) {
           setOperation(num.value);
-          setPreviousValue(currentValue);
-          setWaitingForOperation(false);
-          setHasDecimal(false);
         } else if (waitingForOperation) {
           const computedValue = operations[operation](
             Number(previousValue),
             Number(currentValue)
           ).toString();
-          setPreviousValue(computedValue);
+          if (num.value === "=") {
+            setCurrentValue(computedValue);
+          } else {
+            setOperation(num.value);
+            setCurrentValue(computedValue);
+          }
+        } else if (num.value === "=") {
+          const computedValue = operations[operation](
+            Number(currentValue),
+            Number(previousValue)
+          ).toString();
           setCurrentValue(computedValue);
-          setHasDecimal(false);
-          setWaitingForOperation(false);
-          setOperation(num.value);
         } else {
           setOperation(num.value);
-          setHasDecimal(false);
         }
+        setWaitingForOperation(false);
+        setHasDecimal(false);
         break;
       case "clear":
         clearAll();
@@ -117,9 +123,8 @@ export const Button: React.FC<ButtonProps> = ({
       case "decimal":
         addDecimal();
         break;
-
       default:
-        console.log("default case!");
+        setCurrentValue("Calculator Error!");
     }
   };
 
