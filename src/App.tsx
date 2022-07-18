@@ -10,6 +10,7 @@ function App() {
   const [previousValue, setPreviousValue] = useState<string>();
   const [operation, setOperation] = useState<Operands>();
   const [waitingForOperation, setWaitingForOperation] = useState<boolean>(true);
+  const [hasDecimal, setHasDecimal] = useState<boolean>(false);
   const digitsOptions = [
     { type: "digit", value: "1" },
     { type: "digit", value: "2" },
@@ -55,6 +56,8 @@ function App() {
               previousValue={previousValue}
               waitingForOperation={waitingForOperation}
               setWaitingForOperation={setWaitingForOperation}
+              hasDecimal={hasDecimal}
+              setHasDecimal={setHasDecimal}
             />
           ))}
         </div>
@@ -71,6 +74,8 @@ function App() {
               previousValue={previousValue}
               waitingForOperation={waitingForOperation}
               setWaitingForOperation={setWaitingForOperation}
+              hasDecimal={hasDecimal}
+              setHasDecimal={setHasDecimal}
             />
           ))}
         </div>
@@ -87,6 +92,8 @@ function App() {
               previousValue={previousValue}
               waitingForOperation={waitingForOperation}
               setWaitingForOperation={setWaitingForOperation}
+              hasDecimal={hasDecimal}
+              setHasDecimal={setHasDecimal}
             />
           ))}
         </div>

@@ -1,3 +1,4 @@
+import React from "react";
 import { Operands, operations } from "./shared/Operands";
 
 export type ButtonProps = {
@@ -18,6 +19,8 @@ export type ButtonProps = {
   setOperation: React.Dispatch<React.SetStateAction<Operands | undefined>>;
   waitingForOperation: boolean;
   setWaitingForOperation: React.Dispatch<React.SetStateAction<boolean>>;
+  hasDecimal: boolean;
+  setHasDecimal: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const Button: React.FC<ButtonProps> = ({
@@ -30,12 +33,42 @@ export const Button: React.FC<ButtonProps> = ({
   setOperation,
   setWaitingForOperation,
   waitingForOperation,
+  hasDecimal,
+  setHasDecimal,
 }) => {
   function clearAll() {
     setCurrentValue("0");
+    setHasDecimal(false);
     setPreviousValue("0");
     setOperation(undefined);
     setWaitingForOperation(true);
+  }
+
+  function opposite() {
+    if (waitingForOperation && currentValue !== "0") {
+      if (currentValue.startsWith("-")) {
+        setCurrentValue(currentValue.slice(1, currentValue.length));
+      } else setCurrentValue("-".concat(currentValue));
+    }
+  }
+
+  function percentage() {
+    if (waitingForOperation && currentValue !== "0") {
+      const computedValue = Number(currentValue) / 100;
+      setCurrentValue(computedValue.toString());
+    }
+  }
+
+  function addDecimal() {
+    if (waitingForOperation && !hasDecimal) {
+      if (currentValue === "0") {
+        setCurrentValue("0.");
+        setHasDecimal(true);
+      } else {
+        setCurrentValue(currentValue.concat("."));
+        setHasDecimal(true);
+      }
+    }
   }
 
   const buttonClickHandler = () => {
@@ -56,6 +89,7 @@ export const Button: React.FC<ButtonProps> = ({
           setOperation(num.value);
           setPreviousValue(currentValue);
           setWaitingForOperation(false);
+          setHasDecimal(false);
         } else if (waitingForOperation) {
           const computedValue = operations[operation](
             Number(previousValue),
@@ -63,16 +97,27 @@ export const Button: React.FC<ButtonProps> = ({
           ).toString();
           setPreviousValue(computedValue);
           setCurrentValue(computedValue);
-
+          setHasDecimal(false);
           setWaitingForOperation(false);
           setOperation(num.value);
         } else {
           setOperation(num.value);
+          setHasDecimal(false);
         }
         break;
       case "clear":
         clearAll();
         break;
+      case "opposite":
+        opposite();
+        break;
+      case "percentage":
+        percentage();
+        break;
+      case "decimal":
+        addDecimal();
+        break;
+
       default:
         console.log("default case!");
     }

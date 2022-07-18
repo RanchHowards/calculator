@@ -11,7 +11,7 @@ export const operations: Record<Operands, Operation> = {
   "-": (num1, num2) => num1 - num2,
   x: (num1, num2) => num1 * num2,
   "÷": (num1, num2) => num1 / num2,
-  "=": (num1, num2) => num2,
+  "=": (num) => num,
 };
 
 export function isOperand(str: unknown): str is Operands {
